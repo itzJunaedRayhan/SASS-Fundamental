@@ -1,0 +1,453 @@
+@mixin bd-radius($value) {
+    -webkit-border-radius: $value;
+    -moz-border-radius: $value;
+    border-radius: $value;
+}
+
+@mixin box-shadow ($top, $left, $blur, $color) {
+    -webkit-box-shadow: $top $left $blur $color;
+    -moz-box-shadow: $top $left $blur $color;
+    box-shadow: $top $left $blur $color;
+}
+
+@mixin margin ($position, $unit) {
+    margin-#{$position} : $unit + 'px';
+}
+
+@mixin set-icon ($name) {
+    .icon-#{$name} {
+        color: tomato;
+        background: url('./icons/#{$name}.png');
+    }
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font: 18px/24px arial;
+}
+
+div{
+    margin: 0 0 15px 15px;
+}
+
+#first{
+    background: darkslateblue;
+    width: 100px;
+    height: 100px;
+    @include bd-radius(50px);
+    @include box-shadow(3px, 3px, 0, rgba(0, 0, 0, 0.3));
+}
+
+#second{
+    background: darkseagreen;
+    width: 600px;
+    padding: 15px;
+    @include bd-radius(20px);
+    @include box-shadow(-3px, -3px, 10px, rgba(0, 0, 0, 0.3));
+}
+
+#third{
+    background: hotpink;
+    width: 400px;
+    padding: 20px;
+    @include bd-radius(75px);
+    @include box-shadow(0px, 0px, 7px, rgba(0, 0, 0, 0.3));
+}
+
+
+
+//  @extends: 
+    %forReuse {
+        font-family: arial;
+        font-size: 16px;
+        margin: 0 0 15px 15px;
+        padding: 15px;
+    }
+
+    #first{
+        background: darkslateblue;
+        width: 500px;
+        @extend %forReuse;
+    }
+
+    #second{
+        background: darkseagreen;
+        width: 400px;
+        @extend %forReuse;
+    }
+
+
+
+
+
+
+
+//  Operators: 
+    //  Equality ==, !=: 
+    .abc {
+        padding: 10px  ==  10px;
+        margin: 20px  != 20px;
+        font-family: arial == 'arial';
+    }
+
+    //  Relational Operators < > <= >=:
+    .xyz {
+        padding: 40 < 20;
+        margin: 20 > 10;
+        width: 100 <= 50;
+        height: 1000ms >= 1s;
+    }
+
+    //  Boolean Operators 'And or Not':
+    .eft {
+        padding: 10px == 10 and arial == 'arial';
+        margin: 20px == 20px or arial == 'arial';
+        width:  not 1000ms == 1s 
+    }
+
+    //  String Operators + : 
+    $var1 : 2;
+    $var2 : 20;
+    .test {
+        padding: $var1 + 'px';;
+    }
+
+    //  Arithmatic Operators '+, -, *, /, %': 
+    .test2 {
+        padding: $var1 + $var2 + 'px';
+        margin: $var2 - $var1 + 'px';
+        width: $var1 * $var2 + 'px';
+        height: $var2 / $var1 + 'px';
+    }
+
+
+
+//  Interpolation: 
+    .test3 {
+        @include margin(right, 20);
+    }
+
+    @include set-icon (duck);
+
+
+
+//  Function:
+    $container-width : 1200;
+
+    @function half ($width) {
+        @return $width / 2 + 'px';
+    }
+
+    @function one-third ($width) {
+        @return $width / 3 + 'px'; 
+    }
+
+    @function one-fourth ($height) {
+        @return $height / 4 + 'px';
+    }
+
+    .container {
+        width: half($container-width);
+    }
+
+    .wrapper-inner {
+        width: one-third($container-width);
+        height: one-fourth($container-width);
+    }
+
+
+
+//  Number Function: 
+    .test4 {
+        margin-left: abs(-56.60) + px;
+        padding: round(3.4) + px;
+        width: floor(450.70) + px;
+        height: max(1px, 4px, 400px);
+        margin-right: percentage(100px / 50px);
+        margin-top: ceil(random() * 100) + px;
+    }
+
+
+//  String Function: 
+    .test5 {
+        font-family: quote(Arial);
+        font-family: unquote("Arial");
+        font-family: to-upper-case("Arial");
+        font-family: to-lower-case("Arial");
+        font-family: str-length(Arial);
+        font-family: str-index("Helvetica Neue", "Neue");
+        font-family: str-insert("Helvetica Neue", "Mono", 10);
+        font-size: unique-id();
+    }
+
+
+
+//  color Function: 
+    $base-color : green;
+    #box1, #box2 {
+        width: 400px;
+        height: 100px;
+        margin-bottom: 20px;
+        border: 1px solid #000;
+    }
+
+    #box1 {
+        background: $base-color;
+    }
+
+    #box2 {
+        //  background: darken($base-color, 70);
+        //  background: lighten($base-color, 30);
+        //  background: adjust-hue($base-color, 60);
+        //  background: saturate($base-color, 80);
+        //  background: desaturate($base-color, 100);
+        //  background: mix($base-color, red, 50);
+        background: transparentize($base-color, 0.1);
+    }
+
+
+
+//  List Function: 
+    $list : 10px, 20px, 30px;
+    $list2 : 40px, 50px, 60px;
+
+    .test6 {
+        padding-left: length($list);
+        padding-right: nth($list, 2);
+        padding-top: set-nth($list, -1, 2em);
+        font-family: set-nth((Helvetica, Arial, Verdana), 1, 'Roboto');
+        padding-bottom: join($list, $list2, comma);
+        margin-left: append($list2, 70, space);
+        margin-right: zip($list, $list2);
+        margin-top: index($list, 30);
+    }
+
+
+
+//  Selector Function: 
+    //  $selector : selector-nest(".abc, .xyz, ", "p"); 
+    //  $selector : selector-nest(".abc", "&:hover");
+    //  $selector : selector-append(".abc", "_copy, _image");
+    //  $selector : selector-replace(".abc .info", ".info", ".xyz");
+    //  $selector : is-superselector(".nav a", ".nav ");
+    //  $selector : simple-selectors("a.abc");
+    $selector : selector-unify(".active a", ".main a");
+    #{$selector} {
+        width: 10px;
+    }
+
+
+
+//  Map Function: 
+    $font-weight : ("regular" : 400, "medium" : 500, "bold" : 700);
+    $light-weight : ("lightest" : 100, "light" : 300);
+    $merge : map-merge($font-weight, $light-weight);
+    $remove : map-remove($light-weight, light);
+    .test7 {
+        font-weight: map-get($font-weight, "bold");
+        font-weight: map-keys($font-weight);
+        font-weight: map-values($font-weight);
+        font-weight: map-keys($merge);
+        font-weight: map-values($light-weight);
+        font-weight: map-has-key($light-weight, light);
+    }
+
+
+
+//  introspection: 
+    $num : 10px;
+    $char : 10px 20px 30px;
+    $map : ("regular" : 400, "medium" : 500, "bold" : 700);
+    @mixin border-radius {
+        border-radius: 5px;
+    }
+    @function add ($a, $b) {
+        @return $a + $b;
+    }
+    .test {
+        $bool : 'true';
+        padding-left: variable-exists(map);
+        padding-right: global-variable-exists(bool);
+        padding-bottom: mixin-exists(border-radius);
+        padding-top: function-exists(add);
+        margin-top: type-of(char);
+        margin-bottom: inspect($char);
+    }
+
+
+
+//  @content Directive: 
+    @mixin hover {
+        &:hover{
+            @content;
+        }
+    }
+    .button{
+        border: 1px solid black;
+
+        @include hover{
+            border-width: 2px;
+        }
+    }
+
+    //  Another Example: 
+    body {
+        background: gray;
+    }
+
+    @mixin media ($width) {
+        @media screen and (max-width: $width) {
+            @content;
+        }
+    }
+
+    @include media(1080) {
+        body {
+            background: red;
+        }
+    }
+
+    @include media(720) {
+        body {
+            background: green;
+        }
+    }
+
+    @include media(480) {
+        body {
+            background: blue;
+        }
+    }
+
+
+
+
+
+//  @media
+    .container {
+        width: 1100px;
+        margin: 0px auto;
+
+        @media screen and (max-width: 1200px) {
+            width: 900px;
+        }
+
+        @media screen and (max-width: 950px) {
+            width: 700px;
+        }
+    }
+
+
+
+//  @at-root: 
+    .item {
+        color: red;
+
+        @at-root {
+            .item-wrapper{
+                color: green;
+
+                img {
+                    width: 100%;
+                }
+            }
+        }
+
+        .item-child {
+            background: tomato;
+        }
+    }
+
+
+
+
+
+//  @if and @else Directives: 
+    $z : 2;
+
+    //  @if:
+    p {
+        @if $z < 5 { color: blue;}
+        @if 1 + 1 == 2 { font-size: 12px;}
+        @if 100 > 30 { background: pink;}
+    }
+
+    //  @else:
+    p {
+        @if $z > 5 {color: blue; font-size: 12px;}
+        @else {color: red;}
+    }
+
+    //  @else if: 
+    p {
+        @if $z > 5 {color: green;}
+        @else if $z == 10 {color: cyan;}
+        @else {color: tomato;}
+    }
+
+    @mixin changeColor ($value) {
+        font-size: $value + px;
+        @if $value > 0 and $value <= 20 {
+            color: green;
+        } @else if $value > 20 and $value <= 50 {
+            color: blue;
+        } @else {
+            color: red;
+        }
+    }
+    .test8 {
+        @include changeColor(30);
+    }
+
+
+
+
+//  @for Loop Directive: 
+    @for $i from 1 through 5 {
+        .list-#{$i} {
+            width: 100px * $i;
+            background: darken(pink, $i * 10%);
+        }
+    }
+
+
+
+//  @each Loop Directive: 
+    $list3 : (normal, bold, italic);
+    @each $i in $list3 {
+        .#{$i} {
+            font-weight: $i;
+        }
+    }
+
+    $list4 : ((normal, bold, 10px),(emphasis, italic, 15px));
+    @each $name, $style, $size in $list4 {
+        .#{$name}{
+            font-weight: $style;
+            font-size: $size;
+        }
+    }
+
+    $list5 : (normal : 12px, bold : 13px, italic : 14px);
+    @each $j,$size in $list5 {
+        .#{$j}{
+            font-weight: $j;
+            font-size: $size;
+        }
+    }
+
+
+
+
+//  @while Loop Directive: 
+    $x : 10;
+
+    @while $x <= 50 {
+        .wrapper-#{$x} {
+            padding-left: 1px * $x;
+        }
+        $x : $x + 10;
+    }
